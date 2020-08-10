@@ -1170,6 +1170,65 @@ namespace BrawlCrate.UI
             }
         }
 
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Select Build to Export
+            if (Program.OpenFolderFile(out string inFolder))
+            {
+                String[] filePaths = Directory.GetFiles(Path.Combine(inFolder, "Project+\\pf\\sound\\tracklist"));
+                Console.WriteLine("");
+
+                // Select build to export brstms
+                if (Program.OpenFolderFile(out string outFolder))
+                {
+                    if (!Directory.Exists(Path.Combine(outFolder, "tracklist"))) Directory.CreateDirectory(Path.Combine(outFolder, "tracklist"));
+                    if (!Directory.Exists(Path.Combine(outFolder, "strm"))) Directory.CreateDirectory(Path.Combine(outFolder, "strm"));
+
+                    // Open each tlst file
+                    foreach (String filePath in filePaths)
+                    {
+                        Program.Open(filePath);
+
+                        // Copy each brstm in tlst file
+                        foreach (TreeNode node in resourceTree.Nodes[0].Nodes)
+                        {
+                            TLSTEntryNode resource = (TLSTEntryNode)((BaseWrapper)node).Resource;
+                            if (resource.SongFileName != null)
+                            {
+                                String songFileName = resource.SongFileName.Replace("/", "\\");
+                                String fileName = Path.Combine(inFolder, "Project+\\pf\\sound\\strm", songFileName + ".brstm");
+                                if (File.Exists(fileName))
+                                {
+                                    String folderName = Directory.GetParent(fileName).Name;
+                                    if (!Directory.Exists(Path.Combine(outFolder, "strm", folderName))) Directory.CreateDirectory(Path.Combine(outFolder, "strm", folderName));
+
+                                    String outFileName = Path.Combine(outFolder, "strm", songFileName + ".brstm");
+                                    if (!File.Exists(outFileName)) File.Copy(fileName, outFileName);
+
+                                    // Check to see if pinch is being used
+                                    if (resource.SongSwitch > 0)
+                                    {
+                                        fileName = Path.Combine(inFolder, "Project+\\pf\\sound\\strm", songFileName + "_b" + ".brstm");
+                                        if (File.Exists(fileName))
+                                        {
+                                            folderName = Directory.GetParent(fileName).Name;
+                                            outFileName = Path.Combine(outFolder, "strm", songFileName + "_b" + ".brstm");
+
+                                        }
+                                        else MessageBox.Show(fileName + " does not exist");
+                                    }
+                                }
+                                else MessageBox.Show(fileName + " does not exist");
+                            }
+                        }
+
+                        File.Copy(filePath, Path.Combine(outFolder, "tracklist", Path.GetFileName(filePath)));
+                    }
+                }
+            }
+        
+        }
+
         #region File Menu
 
         private void aRCArchiveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1525,6 +1584,7 @@ namespace BrawlCrate.UI
             this.rEFFParticlesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rEFTParticleTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1657,6 +1717,7 @@ namespace BrawlCrate.UI
                 this.openToolStripMenuItem,
                 this.openTemplateToolStripMenuItem,
                 this.openFolderToolStripMenuItem,
+                this.exportToolStripMenuItem,
                 this.saveToolStripMenuItem,
                 this.saveAsToolStripMenuItem,
                 this.closeToolStripMenuItem,
@@ -1778,6 +1839,15 @@ namespace BrawlCrate.UI
             this.openToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.openToolStripMenuItem.Text = "&Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+
+            //
+            // exportToolStripMenuItem
+            //
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.exportToolStripMenuItem.Text = "&Export...";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+
             // 
             // openTemplateToolStripMenuItem
             // 
@@ -1789,6 +1859,7 @@ namespace BrawlCrate.UI
             this.openTemplateToolStripMenuItem.Text = "&Open Template...";
             this.openTemplateToolStripMenuItem.Click +=
                 new System.EventHandler(this.openTemplateToolStripMenuItem_Click);
+
             // 
             // openFolderToolStripMenuItem
             // 
@@ -2361,6 +2432,9 @@ namespace BrawlCrate.UI
         private ToolStripMenuItem openToolStripMenuItem;
         private ToolStripMenuItem openTemplateToolStripMenuItem;
         private ToolStripMenuItem openFolderToolStripMenuItem;
+
+        private ToolStripMenuItem exportToolStripMenuItem;
+
         private ToolStripSeparator toolStripMenuItem1;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem closeToolStripMenuItem;
