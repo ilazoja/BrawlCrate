@@ -1181,8 +1181,10 @@ namespace BrawlCrate.UI
                 // Select build to export brstms
                 if (Program.OpenFolderFile(out string outFolder))
                 {
-                    if (!Directory.Exists(Path.Combine(outFolder, "tracklist"))) Directory.CreateDirectory(Path.Combine(outFolder, "tracklist"));
-                    if (!Directory.Exists(Path.Combine(outFolder, "strm"))) Directory.CreateDirectory(Path.Combine(outFolder, "strm"));
+                    if (Directory.Exists(Path.Combine(outFolder, "Project+\\pf\\sound\\tracklist"))) Directory.Delete(Path.Combine(outFolder, "Project+\\pf\\sound\\tracklist"), true);                        
+                    Directory.CreateDirectory(Path.Combine(outFolder, "Project+\\pf\\sound\\tracklist"));
+
+                    if (!Directory.Exists(Path.Combine(outFolder, "Project+\\pf\\sound\\strm"))) Directory.CreateDirectory(Path.Combine(outFolder, "Project+\\pf\\sound\\strm"));
 
                     // Open each tlst file
                     foreach (String filePath in filePaths)
@@ -1200,9 +1202,9 @@ namespace BrawlCrate.UI
                                 if (File.Exists(fileName))
                                 {
                                     String folderName = Directory.GetParent(fileName).Name;
-                                    if (!Directory.Exists(Path.Combine(outFolder, "strm", folderName))) Directory.CreateDirectory(Path.Combine(outFolder, "strm", folderName));
+                                    if (!Directory.Exists(Path.Combine(outFolder, "Project+\\pf\\sound\\strm", folderName))) Directory.CreateDirectory(Path.Combine(outFolder, "Project+\\pf\\sound\\strm", folderName));
 
-                                    String outFileName = Path.Combine(outFolder, "strm", songFileName + ".brstm");
+                                    String outFileName = Path.Combine(outFolder, "Project+\\pf\\sound\\strm", songFileName + ".brstm");
                                     if (!File.Exists(outFileName)) File.Copy(fileName, outFileName);
 
                                     // Check to see if pinch is being used
@@ -1212,7 +1214,8 @@ namespace BrawlCrate.UI
                                         if (File.Exists(fileName))
                                         {
                                             folderName = Directory.GetParent(fileName).Name;
-                                            outFileName = Path.Combine(outFolder, "strm", songFileName + "_b" + ".brstm");
+                                            outFileName = Path.Combine(outFolder, "Project+\\pf\\sound\\strm", songFileName + "_b" + ".brstm");
+                                            if (!File.Exists(outFileName)) File.Copy(fileName, outFileName);
 
                                         }
                                         else MessageBox.Show(fileName + " does not exist");
@@ -1222,11 +1225,16 @@ namespace BrawlCrate.UI
                             }
                         }
 
-                        File.Copy(filePath, Path.Combine(outFolder, "tracklist", Path.GetFileName(filePath)));
+                        File.Copy(filePath, Path.Combine(outFolder, "Project+\\pf\\sound\\tracklist", Path.GetFileName(filePath)));
                     }
                 }
             }
         
+        }
+
+        private void buildReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         #region File Menu
@@ -1585,6 +1593,7 @@ namespace BrawlCrate.UI
             this.rEFTParticleTexturesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buildReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1718,6 +1727,7 @@ namespace BrawlCrate.UI
                 this.openTemplateToolStripMenuItem,
                 this.openFolderToolStripMenuItem,
                 this.exportToolStripMenuItem,
+                this.buildReportToolStripMenuItem,
                 this.saveToolStripMenuItem,
                 this.saveAsToolStripMenuItem,
                 this.closeToolStripMenuItem,
@@ -1847,6 +1857,15 @@ namespace BrawlCrate.UI
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.exportToolStripMenuItem.Text = "&Export...";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+
+            //
+            // buildReportToolStripMenuItem
+            //
+
+            this.buildReportToolStripMenuItem.Name = "buildReportToolStripMenuItem";
+            this.buildReportToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.buildReportToolStripMenuItem.Text = "&Create Sheet...";
+            this.buildReportToolStripMenuItem.Click += new System.EventHandler(this.buildReportToolStripMenuItem_Click);
 
             // 
             // openTemplateToolStripMenuItem
@@ -2434,6 +2453,7 @@ namespace BrawlCrate.UI
         private ToolStripMenuItem openFolderToolStripMenuItem;
 
         private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripMenuItem buildReportToolStripMenuItem;
 
         private ToolStripSeparator toolStripMenuItem1;
         private ToolStripMenuItem exitToolStripMenuItem;
