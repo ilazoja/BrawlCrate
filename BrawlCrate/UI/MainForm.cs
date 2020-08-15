@@ -1234,12 +1234,13 @@ namespace BrawlCrate.UI
 
         private void buildReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SheetBuilder sheetBuilder = new SheetBuilder();
 
             // Select Build to Export
             if (Program.OpenFolderFile(out string inFolder))
             {
                 String[] filePaths = Directory.GetFiles(Path.Combine(inFolder, "Project+\\pf\\sound\\tracklist"));
+
+                SheetBuilder sheetBuilder = new SheetBuilder();
 
                 // Open each tlst file
                 foreach (String filePath in filePaths)
@@ -1254,7 +1255,12 @@ namespace BrawlCrate.UI
                         TLSTEntryNode resource = (TLSTEntryNode)((BaseWrapper)node).Resource;
                         if (resource.SongFileName != null) // TODO: Put Brawl tracks in sheet so they can be tracked (by ID)
                         {
-                            sheetBuilder.addTlstToSongList(resourceTree.Nodes[0].Text, resource.SongFileName, resource.SongID.ToString());
+                            sheetBuilder.addTlstToSongList(resourceTree.Nodes[0].Text, resource.SongFileName, resource.SongID.ToString("X4"), false);
+                            // Check to see if pinch is being used
+                            if (resource.SongSwitch > 0)
+                            {
+                                sheetBuilder.addTlstToSongList(resourceTree.Nodes[0].Text, resource.SongFileName + "_b", "PINCH", true);
+                            }
                         }
                     }
                     
