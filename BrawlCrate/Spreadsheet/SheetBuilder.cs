@@ -12,6 +12,7 @@ using System.Reflection;
 
 namespace BrawlCrate.Spreadsheet
 {
+    // TODO: Use EPPlus 5 instead of Interop Excel?
     public class SheetBuilder
     {
         // If modifying these scopes, delete your previously saved credentials
