@@ -5,6 +5,7 @@ using BrawlCrate.BrawlManagers.StageManager;
 using BrawlCrate.ExternalInterfacing;
 using BrawlCrate.NodeWrappers;
 using BrawlCrate.Properties;
+using BrawlCrate.Spreadsheet;
 using BrawlCrate.UI.Model_Previewer.ModelEditControl;
 using BrawlLib.Imaging;
 using BrawlLib.Internal;
@@ -1234,7 +1235,7 @@ namespace BrawlCrate.UI
 
         private void buildReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SheetsQuickstart.readSheet();
         }
 
         #region File Menu

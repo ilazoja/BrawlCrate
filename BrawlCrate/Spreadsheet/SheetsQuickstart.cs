@@ -17,12 +17,12 @@ namespace BrawlCrate.Spreadsheet
         static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         static string ApplicationName = "ProjectPlusBuildReporter";
 
-        static void readSheet()
+        public static void readSheet()
         {
             UserCredential credential;
 
             using (var stream =
-                new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+                new FileStream("Spreadsheet\\credentials.json", FileMode.Open, FileAccess.Read))
             {
                 // The file token.json stores the user's access and refresh tokens, and is created
                 // automatically when the authorization flow completes for the first time.
