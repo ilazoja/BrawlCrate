@@ -1177,7 +1177,6 @@ namespace BrawlCrate.UI
             if (Program.OpenFolderFile(out string inFolder))
             {
                 String[] filePaths = Directory.GetFiles(Path.Combine(inFolder, "Project+\\pf\\sound\\tracklist"));
-                Console.WriteLine("");
 
                 // Select build to export brstms
                 if (Program.OpenFolderFile(out string outFolder))
@@ -1235,7 +1234,33 @@ namespace BrawlCrate.UI
 
         private void buildReportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SheetsQuickstart.readSheet();
+            SheetBuilder sheetBuilder = new SheetBuilder();
+
+            // Select Build to Export
+            if (Program.OpenFolderFile(out string inFolder))
+            {
+                String[] filePaths = Directory.GetFiles(Path.Combine(inFolder, "Project+\\pf\\sound\\tracklist"));
+
+                // Open each tlst file
+                foreach (String filePath in filePaths)
+                {
+                    Program.Open(filePath);
+
+                    sheetBuilder.addTracklistHeader(resourceTree.Nodes[0].Text);
+                    // Copy each brstm in tlst file
+                    foreach (TreeNode node in resourceTree.Nodes[0].Nodes)
+                    {
+                        
+                        TLSTEntryNode resource = (TLSTEntryNode)((BaseWrapper)node).Resource;
+                        if (resource.SongFileName != null) // TODO: Put Brawl tracks in sheet so they can be tracked (by ID)
+                        {
+                            sheetBuilder.addTlstToSongList(resourceTree.Nodes[0].Text, resource.SongFileName, resource.SongID.ToString());
+                        }
+                    }
+                    
+                }
+              
+            }
         }
 
         #region File Menu

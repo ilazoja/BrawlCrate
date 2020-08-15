@@ -13,6 +13,9 @@ TestResults
 *.user
 *.sln.docstates
 
+# Credentials
+*credentials.json
+
 # Build results
 [Dd]ebug/
 [Rr]elease/
